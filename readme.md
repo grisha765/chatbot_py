@@ -109,14 +109,6 @@ curl http://127.0.0.1:8000/v1/chat/completions \
 - `logging_config.py`: Logging configuration.
 - `requirements.txt`: List of dependencies.
 
-## Features
-
-- **Browser Automation**: Utilizes `pyppeteer` to automate browser interactions, simulating user actions to chat with the GPT model.
-- **Interactive Mode**: Provides an interactive mode for chatting directly via the command line, with special commands for taking screenshots.
-- **API Key Authentication**: Secure API endpoint with key-based authentication for authorized access.
-- **Error Handling**: Robust error handling to manage and log exceptions during execution.
-- **Configurable Settings**: Easily adjustable settings for logging details and API configurations.
-
 ## Contributing
 
 Contributions are welcome! Please fork the repository and submit pull requests.
