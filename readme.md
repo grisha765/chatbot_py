@@ -68,7 +68,7 @@ To interact with the chatbot directly from the command line, use:
 
 ```json
 {
-  "model": "gpt-3.5-turbo",
+  "model": "gpt-3.5-duck",
   "messages": [
     {"role": "user", "content": "Hello, GPT-3.5!"}
   ],
