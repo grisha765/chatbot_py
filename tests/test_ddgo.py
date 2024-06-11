@@ -14,5 +14,4 @@ async def test_bot_response():
         logging.error(f"The bot's response does not contain the word '{Config.test_response}'")
     finally:
         await browser.close()
-        logging.info("Test passed!")
-
+        logging.info(f'{"\x1b[32m"}Test passed!{"\x1b[0m"}')
