@@ -8,5 +8,5 @@ class Config():
         "userapi008": "user"
         # Добавьте другие API ключи здесь
     }
-    test_request: str = os.getenv('TEST_REQUEST', "Напиши мне слово Тест и ничего более!")
-    test_response: str = os.getenv('TEST_RESPONSE', "Тест")
+    test_request: str = os.getenv('TEST_REQUEST', "Write me the word Test and nothing more!")
+    test_response: str = os.getenv('TEST_RESPONSE', "Test")
