@@ -4,11 +4,13 @@ from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel
 from typing import List
 from contextlib import asynccontextmanager
+
 from core.init_browser import init_browser
 from providers.ddgo.start import prepare_page
 from providers.ddgo.gpt3 import send_message_fastapi
 from config import logging_config
-logging = logging_config.setup_logging(name='api', enable_detailed_logs=True)
+from config.config import Config
+logging = logging_config.setup_logging(__name__)
 
 app = FastAPI()
 
@@ -17,10 +19,7 @@ browser = None
 page = None
 
 # Список API ключей
-API_KEYS = {
-    "adminapi007": "admin",
-    # Добавьте другие API ключи здесь
-}
+API_KEYS = Config.api_keys 
 
 class Message(BaseModel):
     role: str
