@@ -1,8 +1,9 @@
 from pyppeteer import launch
+
 from providers.ddgo.start import prepare_page
 from providers.ddgo.gpt3 import send_message, take_screenshot
 from config import logging_config
-logging = logging_config.setup_logging(name='chat_bot', enable_detailed_logs=True)
+logging = logging_config.setup_logging(__name__)
 
 # Функция для инициализации браузера и страницы
 async def init_browser():
