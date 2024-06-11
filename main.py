@@ -24,9 +24,9 @@ def run_api():
     asyncio.ensure_future(server.serve())
     loop.run_forever()
 
-def run_chat_bot(input_text=None, screenshot_path=None):
+def run_chat_bot(input_text=None, screenshot_path=None, model=None):
     logging.info("Starting Chat Bot...")
-    response = asyncio.run(browser_main(input_text, screenshot_path))
+    response = asyncio.run(browser_main(input_text, screenshot_path, model))
     return response
 
 async def run_tests():
@@ -38,6 +38,7 @@ if __name__ == '__main__':
     parser.add_argument('input_text', type=str, nargs='?', default=None, help='Text to send to the Chat Bot')
     parser.add_argument('--screenshot', type=str, default='', help='Path to save screenshot (optional)')
     parser.add_argument('--tests',nargs='?', const=True, default=False, help='Run tests...')
+    parser.add_argument('--model', type=str, choices=['gpt-3.5-duck', 'llama3-duck'], help='Model to use for the chat bot')
     args = parser.parse_args()
 
     logging = logging_config.setup_logging(__name__)
@@ -47,5 +48,5 @@ if __name__ == '__main__':
     if args.tests:
         asyncio.run(run_tests()) 
     else:
-        run_chat_bot(args.input_text, args.screenshot)
+        run_chat_bot(args.input_text, args.screenshot, args.model)
 
