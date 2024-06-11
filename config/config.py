@@ -7,3 +7,5 @@ class Config():
         "userapi008": "user"
         # Добавьте другие API ключи здесь
     }
+    test_request: str = "Напиши мне слово Тест и ничего более!"
+    test_response: str = "Тест"
