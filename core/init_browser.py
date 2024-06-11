@@ -19,7 +19,8 @@ async def main(input_text=None, screenshot_path=None):
 
         # Если введен текст, отправляем его и завершаем
         if input_text:
-            await send_message(page, input_text, screenshot_path)
+            response = await send_message(page, input_text, screenshot_path)
+            print(response)
         else:
             # Иначе запускаем интерактивный режим
             print("Entering interactive chat mode. Type 'exit' to quit.")
@@ -31,8 +32,8 @@ async def main(input_text=None, screenshot_path=None):
                     _, file_name = user_input.split(maxsplit=1)
                     await take_screenshot(page, file_name)
                 else:
-                    await send_message(page, user_input)
-
+                    response = await send_message(page, user_input)
+                    print(f"Bot: {response}")
         # Закрываем браузер
         await browser.close()
     except Exception as e:
