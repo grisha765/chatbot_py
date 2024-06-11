@@ -34,6 +34,7 @@ async def send_message(page, message, screenshot_path=None):
     if screenshot_path:
         logging.info(f"Saving screenshot to {screenshot_path}")
         await page.screenshot({'path': screenshot_path})
+    return last_response
 
 # Функция для FastAPI, возвращающая ответ без печати
 async def send_message_fastapi(page, message):
