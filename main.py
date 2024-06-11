@@ -4,9 +4,8 @@ import signal
 import uvicorn
 
 from core.init_browser import main as chat_bot_main
-
+from config.config import Config
 from config import logging_config
-logging = logging_config.setup_logging(name='main', enable_detailed_logs=True)
 
 def handle_exit(sig, frame):
     logging.info("Shutting down server...")
@@ -14,7 +13,7 @@ def handle_exit(sig, frame):
 
 def run_api():
     logging.info("Starting FastAPI server...")
-    config = uvicorn.Config("core/api:app", host="127.0.0.1", port=8000, log_level="info")
+    config = uvicorn.Config("core.api:app", host=Config.api_host, port=Config.api_port, log_level="info")
     server = uvicorn.Server(config)
 
     loop = asyncio.get_event_loop()
@@ -34,6 +33,8 @@ if __name__ == '__main__':
     parser.add_argument('input_text', type=str, nargs='?', default=None, help='Text to send to the Chat Bot')
     parser.add_argument('--screenshot', type=str, default='', help='Path to save screenshot (optional)')
     args = parser.parse_args()
+
+    logging = logging_config.setup_logging(__name__)
 
     if args.api:
         run_api()
