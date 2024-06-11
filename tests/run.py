@@ -1,4 +1,4 @@
-from tests.test_ddgo import test_bot_response
+from tests.test_base import test_bot_response
 from tests.test_fastapi import test_chat_completions
 from config import logging_config
 async def run():
