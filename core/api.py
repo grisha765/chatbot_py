@@ -7,7 +7,8 @@ from contextlib import asynccontextmanager
 
 from core.init_browser import init_browser
 from providers.ddgo.start import prepare_page
-from providers.ddgo.gpt3 import send_message_fastapi
+from providers.ddgo.gpt3 import send_message_fastapi as send_message_gpt3
+from providers.ddgo.llama3 import send_message_fastapi as send_message_llama3
 from config import logging_config
 from config.config import Config
 logging = logging_config.setup_logging(__name__)
@@ -30,14 +31,22 @@ class ChatRequest(BaseModel):
     messages: List[Message]
     temperature: float
 
-async def process_message(messages: List[Message]) -> str:
+async def process_message(model:str, messages: List[Message]) -> str:
     global page
     # Отправляем сообщения по порядку и получаем ответ
     response = ""
-    for message in messages:
-        logging.info(f"Sending message: {message.content}")
-        response = await send_message_fastapi(page, message.content)
-        logging.info(f"Received response: {response}")
+    if model == "gpt-3.5-duck":
+        for message in messages:
+            logging.info(f"Sending message to {model}: {message.content}")
+            response = await send_message_gpt3(page, message.content)
+            logging.info(f"Received response from {model}: {response}")
+    elif model == "llama3-duck":
+        for message in messages:
+            logging.info(f"Sending message to {model}: {message.content}")
+            response = await send_message_llama3(page, message.content)
+            logging.info(f"Received response from {model}: {response}")
+    else:
+        raise HTTPException(status_code=400, detail="Invalid model specified")
     return response
 
 @asynccontextmanager
@@ -62,7 +71,7 @@ async def chat_completions(request: Request, chat_request: ChatRequest):
         raise HTTPException(status_code=401, detail="Unauthorized")
 
     try:
-        response = await process_message(chat_request.messages)
+        response = await process_message(chat_request.model, chat_request.messages)
         return {"response": response}
     except Exception as e:
         logging.error(f"An error occurred: {e}")
