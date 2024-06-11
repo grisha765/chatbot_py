@@ -1,6 +1,8 @@
 import asyncio
+
 from config import logging_config
-logging = logging_config.setup_logging(name='chat_bot', enable_detailed_logs=True)
+logging = logging_config.setup_logging(__name__)
+
 # Функция для отправки сообщения и получения ответа
 async def send_message(page, message, screenshot_path=None):
     # Ввод текста в поле ввода

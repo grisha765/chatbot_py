@@ -1,6 +1,8 @@
 import asyncio
+
 from config import logging_config
-logging = logging_config.setup_logging(name='chat_bot', enable_detailed_logs=True)
+logging = logging_config.setup_logging(__name__)
+
 # Функция для навигации и подготовки страницы
 async def prepare_page(page):
     logging.info("Navigating to DuckDuckGo AI Chat...")
