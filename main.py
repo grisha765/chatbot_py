@@ -3,7 +3,7 @@ import asyncio
 import signal
 import uvicorn
 
-from core.init_browser import main as chat_bot_main
+from core.init_browser import main as browser_main
 from tests.run import run
 from config.config import Config
 from config import logging_config
@@ -26,7 +26,8 @@ def run_api():
 
 def run_chat_bot(input_text=None, screenshot_path=None):
     logging.info("Starting Chat Bot...")
-    asyncio.run(chat_bot_main(input_text, screenshot_path))
+    response = asyncio.run(browser_main(input_text, screenshot_path))
+    return response
 
 async def run_tests():
     await run()
