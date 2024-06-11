@@ -3,9 +3,9 @@ import asyncio
 import signal
 import uvicorn
 
-from chat_bot import main as chat_bot_main
+from core.init_browser import main as chat_bot_main
 
-import logging_config
+from config import logging_config
 logging = logging_config.setup_logging(name='main', enable_detailed_logs=True)
 
 def handle_exit(sig, frame):
@@ -14,7 +14,7 @@ def handle_exit(sig, frame):
 
 def run_api():
     logging.info("Starting FastAPI server...")
-    config = uvicorn.Config("api:app", host="127.0.0.1", port=8000, log_level="info")
+    config = uvicorn.Config("core/api:app", host="127.0.0.1", port=8000, log_level="info")
     server = uvicorn.Server(config)
 
     loop = asyncio.get_event_loop()
