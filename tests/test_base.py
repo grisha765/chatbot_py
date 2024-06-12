@@ -24,3 +24,6 @@ async def test_bot_response():
             logging.error(f'{"\x1b[31m"}{model}: An error occurred: {e}{"\x1b[0m"}')
         finally:
             await browser.close()
+
+if __name__ == "__main__":
+    raise RuntimeError("This module should be run only via main.py")
