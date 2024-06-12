@@ -29,7 +29,8 @@ async def test_chat_completions():
                 try:
                     response = await client.post("/v1/chat/completions", json=test_message, headers=HEADERS)
                     assert response.status_code == 200, f"{model}: Expected status code 200, but got {response.status_code}"
-                    assert response.json()["response"] == EXPECTED_RESPONSE, f"{model}: Expected response '{EXPECTED_RESPONSE}', but got '{response.json()['response']}'"
+                    assert response.json()["choices"][0]["message"]["content"] == EXPECTED_RESPONSE, f"{model}: Expected response '{EXPECTED_RESPONSE}', but got '{response.json()['choices'][0]['message']['content']}'"
+
                     logging.info(f'{"\x1b[32m"}{model}: Test passed!{"\x1b[0m"}')
                 except Exception as e:
                     logging.error(f"{model}: The bot's response does not contain the expected response", e)
