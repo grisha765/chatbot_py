@@ -66,17 +66,17 @@ To interact with the chatbot directly from the command line, use:
 
 - Response:
     ```json
-        {
+    {
         "id": "chatcmpl-12345",
         "object": "chat.completion",
         "created": 1677631234,
-        "model": model,
+        "model": "model",
         "choices": [
             {
                 "index": 0,
                 "message": {
                     "role": "assistant",
-                    "content": response
+                    "content": "response"
                 },
                 "finish_reason": "stop"
             }
