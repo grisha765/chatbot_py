@@ -30,29 +30,46 @@ async def send_message(page, message, screenshot_path=None):
 # Функция для FastAPI, возвращающая ответ без печати
 async def send_message_fastapi(page, message):
     await clickss(page, message, "Llama", False)
-    # Динамическое ожидание появления нового ответа
-    logging.info("Waiting for response...")
-    last_response = ""
+    async def wait_for_response(page):
+        # Динамическое ожидание появления нового ответа
+        logging.info("Waiting for response...")
+        last_response = ""
+        while True:
+            await asyncio.sleep(1)
+            response_elements = await page.querySelectorAll('div > div:nth-child(2) > div:nth-child(2)')
+            if response_elements:
+                current_response = await page.evaluate('(element) => element.innerText', response_elements[-1])
+                if "Generating response..." in current_response:
+                    continue
+                if current_response != last_response:
+                    last_response = current_response
+                else:
+                    break
+        return last_response
     while True:
-        await asyncio.sleep(1)
-        response_elements = await page.querySelectorAll('div > div:nth-child(2) > div:nth-child(2)')
-        if response_elements:
-            current_response = await page.evaluate('(element) => element.innerText', response_elements[-1])
-            if "Generating response..." in current_response:
-                continue
-            if current_response != last_response:
-                last_response = current_response
-            else:
-                break
+        last_response = await wait_for_response(page)
+        if "DuckDuckGo AI Chat is temporarily unavailable. Please refresh the page and try again." in last_response:
+            logging.warning("DuckDuckGo AI Chat is temporarily unavailable. Refreshing the page...")
+            await page.reload()
+            await clickss(page, message, "Llama", False)
+        else:
+            break
 
     # Нажимаем кнопку очистки
-    await asyncio.sleep(1)
-    buttons = await page.querySelectorAll('[data-reach-tooltip-trigger]')
-    if len(buttons) >= 4:
-        await buttons[3].click()
-        logging.debug("Clicking 'Clear' button...")
-    else:
-        logging.error("The required button was not found.")
+    while True:
+        await asyncio.sleep(1)
+        buttons = await page.querySelectorAll('[data-reach-tooltip-trigger]')
+        if len(buttons) >= 4:
+            await buttons[3].click()
+            logging.debug("Clicking 'Clear' button...")
+            break
+        else:
+            logging.error("The required button was not found.")
+            await page.reload()
+            await clickss(page, message, "Llama", False)
+            last_response = await wait_for_response(page)
+            if "DuckDuckGo AI Chat is temporarily unavailable. Please refresh the page and try again." not in last_response:
+                continue
 
     # Возвращаем ответ
     return last_response
