@@ -72,7 +72,22 @@ async def chat_completions(request: Request, chat_request: ChatRequest):
 
     try:
         response = await process_message(chat_request.model, chat_request.messages)
-        return {"response": response}
+        return {
+            "id": "chatcmpl-12345",
+            "object": "chat.completion",
+            "created": 1677631234,
+            "model": chat_request.model,
+            "choices": [
+                {
+                    "index": 0,
+                    "message": {
+                        "role": "assistant",
+                        "content": response
+                    },
+                    "finish_reason": "stop"
+                }
+            ]
+        }
     except Exception as e:
         logging.error(f"An error occurred: {e}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
