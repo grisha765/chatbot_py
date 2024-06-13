@@ -1,28 +1,10 @@
 import argparse
 import asyncio
-import signal
-import uvicorn
 
 from core.base import main as base_main
+from core.api import run_server
 from tests.run import run
-from config.config import Config
 from config import logging_config
-
-def handle_exit(sig, frame):
-    logging.info("Shutting down server...")
-    asyncio.get_event_loop().stop()
-
-def run_api():
-    logging.info("Starting FastAPI server...")
-    config = uvicorn.Config("core.api:app", host=Config.api_host, port=Config.api_port, log_level="info")
-    server = uvicorn.Server(config)
-
-    loop = asyncio.get_event_loop()
-    loop.add_signal_handler(signal.SIGINT, handle_exit, signal.SIGINT, None)
-    loop.add_signal_handler(signal.SIGTERM, handle_exit, signal.SIGTERM, None)
-
-    asyncio.ensure_future(server.serve())
-    loop.run_forever()
 
 def run_chat_bot(input_text=None, screenshot_path=None, model=None):
     logging.info("Starting Chat Bot...")
@@ -44,7 +26,7 @@ if __name__ == '__main__':
     logging = logging_config.setup_logging(__name__)
 
     if args.api:
-        run_api()
+        run_server()
     if args.tests:
         asyncio.run(run_tests()) 
     else:
