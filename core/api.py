@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from typing import List
 from contextlib import asynccontextmanager
 
-from core.init_browser import init_browser
+from core.browser import init_browser
 from providers.ddgo.start import prepare_page
 from providers.ddgo.gpt3 import send_message_fastapi as send_message_gpt3
 from providers.ddgo.llama3 import send_message_fastapi as send_message_llama3
