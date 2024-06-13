@@ -12,7 +12,7 @@ TEST_MODELS = {
 
 async def test_bot_response():
     for model, send_message_func in TEST_MODELS.items():
-        browser, page = await init_browser()
+        browser, page, playwright = await init_browser()
         try:
             await prepare_page(page)
             response = await send_message_func(page, Config.test_request)
@@ -24,6 +24,7 @@ async def test_bot_response():
             logging.error(f'{"\x1b[31m"}{model}: An error occurred: {e}{"\x1b[0m"}')
         finally:
             await browser.close()
+            await playwright.stop()
 
 if __name__ == "__main__":
     raise RuntimeError("This module should be run only via main.py")
