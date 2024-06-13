@@ -1,5 +1,4 @@
 import asyncio
-import signal
 from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel
 from typing import List
@@ -53,13 +52,22 @@ async def process_message(model:str, messages: List[Message]) -> str:
 async def lifespan(app: FastAPI):
     global browser, page
     logging.info("Initializing browser and page")
-    browser, page = await init_browser()
+    browser, page, playwright = await init_browser()
     await prepare_page(page)
     try:
         yield
     finally:
         logging.info("Closing browser")
-        await browser.close()
+        if browser:
+            try:
+                await browser.close()
+            except Exception as e:
+                logging.error(f"An error occurred while closing the browser: {e}")
+        if playwright:
+            try:
+                await playwright.stop()
+            except Exception as e:
+                logging.error(f"An error occurred while stopping playwright: {e}")
 
 app.router.lifespan_context = lifespan
 
@@ -92,21 +100,9 @@ async def chat_completions(request: Request, chat_request: ChatRequest):
         logging.error(f"An error occurred: {e}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
-def handle_exit(sig, frame):
-    logging.info("Shutting down server...")
-    asyncio.get_event_loop().stop()
-
 def run_server():
     import uvicorn
-    config = uvicorn.Config("api:app", host="127.0.0.1", port=8000, log_level="info")
-    server = uvicorn.Server(config)
-
-    loop = asyncio.get_event_loop()
-    loop.add_signal_handler(signal.SIGINT, handle_exit, signal.SIGINT, None)
-    loop.add_signal_handler(signal.SIGTERM, handle_exit, signal.SIGTERM, None)
-    
-    asyncio.ensure_future(server.serve())
-    loop.run_forever()
+    uvicorn.run("core.api:app", host=Config.api_host, port=Config.api_port, log_level="info")
 
 if __name__ == "__main__":
     raise RuntimeError("This module should be run only via main.py")
