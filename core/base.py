@@ -1,17 +1,10 @@
-from pyppeteer import launch
-
 from providers.ddgo.start import prepare_page
 from providers.ddgo.gpt3 import send_message as send_message_gpt3
 from providers.ddgo.llama3 import send_message as send_message_llama3
 from core.screenshot import take_screenshot
+from core.browser import init_browser
 from config import logging_config
 logging = logging_config.setup_logging(__name__)
-
-# Функция для инициализации браузера и страницы
-async def init_browser():
-    browser = await launch()
-    page = await browser.newPage()
-    return browser, page
 
 # Основная функция
 async def main(input_text=None, screenshot_path=None, model=None):
