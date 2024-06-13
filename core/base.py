@@ -9,7 +9,7 @@ logging = logging_config.setup_logging(__name__)
 # Основная функция
 async def main(input_text=None, screenshot_path=None, model=None):
     try:
-        browser, page = await init_browser()
+        browser, page, playwright = await init_browser()
         await prepare_page(page)
 
         if model == 'gpt-3.5-duck':
@@ -38,6 +38,7 @@ async def main(input_text=None, screenshot_path=None, model=None):
                     print(f"Bot: {response}")
         # Закрываем браузер
         await browser.close()
+        await playwright.stop()
     except Exception as e:
         logging.error(f"An error occurred: {e}")
 if __name__ == '__main__':
