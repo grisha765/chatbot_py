@@ -9,14 +9,14 @@ async def prepare_page(page):
     await page.goto('https://duckduckgo.com/?q=DuckDuckGo&ia=chat')
     
     # Ждем, пока страница полностью загрузится
-    await page.waitForSelector('button')
+    await page.wait_for_selector('button')
     
     # Нажимаем на кнопку с текстом "Get Started"
     logging.debug("Clicking 'Get Started' button...")
-    buttons = await page.querySelectorAll('button')
+    buttons = await page.query_selector_all('button')
     try:
         for button in buttons:
-            text = await page.evaluate('(button) => button.textContent', button)
+            text = await button.text_content()
             if 'Get Started' in text:
                 await button.click()
                 break
@@ -24,14 +24,14 @@ async def prepare_page(page):
         logging.error(f"Error clicking 'Get Started' button: {e}")
     
     # Ждем появления кнопки "Next"
-    await page.waitForSelector('button')
+    await page.wait_for_selector('button')
 
     # Нажимаем на кнопку с текстом "Next"
     logging.debug("Clicking 'Next' button...")
-    buttons = await page.querySelectorAll('button')
+    buttons = await page.query_selector_all('button')
     try:
         for button in buttons:
-            text = await page.evaluate('(button) => button.textContent', button)
+            text = await button.text_content()
             if 'Next' in text:
                 await button.click()
                 break
@@ -39,14 +39,14 @@ async def prepare_page(page):
         logging.error(f"Error clicking 'Next' button: {e}")
 
     # Ждем появления кнопки "I Agree"
-    await page.waitForSelector('button')
+    await page.wait_for_selector('button')
 
     # Нажимаем на кнопку с текстом "I Agree"
     logging.debug("Clicking 'I Agree' button...")
-    buttons = await page.querySelectorAll('button')
+    buttons = await page.query_selector_all('button')
     try:
         for button in buttons:
-            text = await page.evaluate('(button) => button.textContent', button)
+            text = await button.text_content()
             if 'I Agree' in text:
                 await button.click()
                 break

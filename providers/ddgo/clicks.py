@@ -11,8 +11,8 @@ def process_string(text, convert_to_lower):
 
 async def clickss(page, message, provider, convert_to_lower):
     try:
-        textarea = await page.querySelector('textarea')
-        text_content = await page.evaluate('(textarea) => textarea.placeholder', textarea)
+        textarea = await page.query_selector('textarea')
+        text_content = await textarea.get_attribute('placeholder')
     except Exception as e:
         logging.error(f"Error querying textarea or evaluating placeholder: {e}")
         return
@@ -20,7 +20,7 @@ async def clickss(page, message, provider, convert_to_lower):
     if provider not in text_content:
         try:
             logging.debug("Clicking 'Change provider' button...")
-            buttons = await page.querySelectorAll('[data-reach-tooltip-trigger]')
+            buttons = await page.query_selector_all('[data-reach-tooltip-trigger]')
             await buttons[0].click()
         except Exception as e:
             logging.error(f"Error clicking 'Change provider' button: {e}")
@@ -28,8 +28,8 @@ async def clickss(page, message, provider, convert_to_lower):
 
         try:
             logging.debug(f"Clicking 'Change to {provider}' button...")
-            await page.waitForSelector(f'label[for*="{process_string(provider, convert_to_lower)}"]')
-            label = await page.querySelector(f'label[for*="{process_string(provider, convert_to_lower)}"]')
+            await page.wait_for_selector(f'label[for*="{process_string(provider, convert_to_lower)}"]')
+            label = await page.query_selector(f'label[for*="{process_string(provider, convert_to_lower)}"]')
             await label.click()
         except Exception as e:
             logging.error(f"Error clicking 'Change to {provider}' button: {e}")
@@ -37,9 +37,9 @@ async def clickss(page, message, provider, convert_to_lower):
 
         try:
             logging.debug("Clicking 'Start New Chat' button...")
-            buttons = await page.querySelectorAll('button')
+            buttons = await page.query_selector_all('button')
             for button in buttons:
-                text = await page.evaluate('(button) => button.textContent', button)
+                text = await button.text_content()
                 if 'Start New Chat' in text:
                     await button.click()
                     break
@@ -50,7 +50,7 @@ async def clickss(page, message, provider, convert_to_lower):
     try:
         # Ввод текста в поле ввода
         logging.debug(f"Typing text: {message}")
-        await page.type(f'textarea[placeholder*="Chat with {provider}"]', message)
+        await page.fill(f'textarea[placeholder*="Chat with {provider}"]', message)
     except Exception as e:
         logging.error(f"Error typing text '{message}': {e}")
         return
@@ -60,7 +60,7 @@ async def clickss(page, message, provider, convert_to_lower):
     try:
         # Нажимаем кнопку отправки
         logging.debug("Clicking 'Send' button...")
-        send_button = await page.querySelector('button[aria-label="Send"]')
+        send_button = await page.query_selector('button[aria-label="Send"]')
         await send_button.click()
     except Exception as e:
         logging.error(f"Error clicking 'Send' button: {e}")
