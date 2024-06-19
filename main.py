@@ -20,7 +20,7 @@ if __name__ == '__main__':
     parser.add_argument('input_text', type=str, nargs='?', default=None, help='Text to send to the Chat Bot')
     parser.add_argument('--screenshot', type=str, default='', help='Path to save screenshot (optional)')
     parser.add_argument('--tests',nargs='?', const=True, default=False, help='Run tests...')
-    parser.add_argument('--model', type=str, choices=['gpt-3.5-duck', 'llama3-duck'], help='Model to use for the chat bot')
+    parser.add_argument('--model', type=str, choices=['gpt-3.5-duck', 'llama3-duck', 'gpt-3.5-deepai'], help='Model to use for the chat bot')
     args = parser.parse_args()
 
     logging = logging_config.setup_logging(__name__)
