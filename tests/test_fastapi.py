@@ -33,7 +33,7 @@ async def test_chat_completions():
 
                     logging.info(f'{"\x1b[32m"}{model}: Test passed!{"\x1b[0m"}')
                 except Exception as e:
-                    logging.error(f"{model}: The bot's response does not contain the expected response", e)
+                    logging.warning(f"{model}: The bot's response does not contain the expected response", e)
 
 if __name__ == "__main__":
     raise RuntimeError("This module should be run only via main.py")
