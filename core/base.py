@@ -1,21 +1,26 @@
-from providers.ddgo.start import prepare_page
-from providers.ddgo.gpt3 import send_message as send_message_gpt3
-from providers.ddgo.llama3 import send_message as send_message_llama3
 from core.screenshot import take_screenshot
 from core.browser import init_browser
 from config import logging_config
 logging = logging_config.setup_logging(__name__)
 
 # Основная функция
-async def main(input_text=None, screenshot_path=None, model=None):
+async def main(input_text: str, screenshot_path: str, model: str):
     try:
         browser, page, playwright = await init_browser()
-        await prepare_page(page)
-
-        if model == 'gpt-3.5-duck':
+        if 'duck' in model:
+            from providers.ddgo.start import prepare_page
+            await prepare_page(page)
+            from providers.ddgo.gpt3 import send_message as send_message_gpt3
+            from providers.ddgo.llama3 import send_message as send_message_llama3
+            if model == 'gpt-3.5-duck':
+                send_message = send_message_gpt3
+            elif model == 'llama3-duck':
+                send_message = send_message_llama3
+        if 'deepai' in model:
+            from providers.deepai.start import prepare_page
+            await prepare_page(page)
+            from providers.deepai.gpt3 import send_message as send_message_gpt3
             send_message = send_message_gpt3
-        elif model == 'llama3-duck':
-            send_message = send_message_llama3
         else:
             raise ValueError("Invalid model specified")
 
