@@ -21,7 +21,7 @@ async def clickss(page, message, provider, convert_to_lower):
         try:
             logging.debug("Clicking 'Change provider' button...")
             buttons = await page.query_selector_all('[data-reach-tooltip-trigger]')
-            await buttons[0].click()
+            await buttons[1].click()
         except Exception as e:
             logging.error(f"Error clicking 'Change provider' button: {e}")
             return
