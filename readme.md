@@ -12,7 +12,7 @@ This project provides an implementation of a chatbot that interacts with various
 git clone https://github.com/grisha765/chatbot_py.git
 cd chatbot_py
 python3 -m venv .venv
-venv/bin/pip install -r requirements.txt
+.venv/bin/pip install -r requirements.txt
 ```
 
 ## Usage
@@ -23,14 +23,14 @@ You can either run the FastAPI server or interact with the chatbot directly from
 
 - To start the interactive mode, use the following command:
     ```bash
-    python main.py --model gpt-3.5-duck
+    python -m chatbot --model gpt-3.5-duck
     ```
 
 ### Running the FastAPI Server
 
 - To start the FastAPI server, use the following command:
     ```bash
-    python main.py --api
+    python -m chatbot --api
     ```
 
 ***This will start the server on `127.0.0.1:8000`.***
@@ -41,14 +41,43 @@ To interact with the chatbot directly from the command line, use:
 
 - One message:
     ```bash
-    python main.py --model gpt-3.5-duck "Your message here"
+    python -m chatbot --model gpt-3.5-duck "Your message here"
     ```
 
 - To save a screenshot of the interaction, use:
     ```bash
-    python main.py --model gpt-3.5-duck "Your message here" --screenshot "path/to/screenshot.png"
+    python -m chatbot --model gpt-3.5-duck "Your message here" --screenshot "path/to/screenshot.png"
     ```
 
+### Python library
+
+- Install with pip
+```bash
+pip install git+https://github.com/grisha765/chatbot_py.git@main#egg=chatbot
+```
+
+- Use as python lib.
+```python
+# import libs
+import asyncio, chatbot
+
+# use async func
+async def main():
+    # init model class
+    model = chatbot.Model()
+    # set options
+    await model.options(model='gpt-3.5-duck', chrome_path='/usr/bin/chromium')
+    # send message to chatbot
+    response = await model.send("Hello, world!")
+    # print response
+    print(response)
+    # close model
+    await model.close()
+
+if __name__ == "__main__":
+    # run async func
+    asyncio.run(main())
+```
 ## API Endpoints
 
 ### POST /v1/chat/completions
