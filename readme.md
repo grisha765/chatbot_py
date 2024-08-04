@@ -52,32 +52,33 @@ To interact with the chatbot directly from the command line, use:
 ### Python library
 
 - Install with pip
-```bash
-pip install git+https://github.com/grisha765/chatbot_py.git@main#egg=chatbot
-```
+    ```bash
+    pip install git+https://github.com/grisha765/chatbot_py.git@main#egg=chatbot
+    ```
 
 - Use as python lib.
-```python
-# import libs
-import asyncio, chatbot
+    ```python
+    # import libs
+    import asyncio, chatbot
 
-# use async func
-async def main():
-    # init model class
-    model = chatbot.Model()
-    # set options
-    await model.options(model='gpt-3.5-duck', chrome_path='/usr/bin/chromium')
-    # send message to chatbot
-    response = await model.send("Hello, world!")
-    # print response
-    print(response)
-    # close model
-    await model.close()
+    # use async func
+    async def main():
+        # init model class
+        model = chatbot.Model()
+        # set options
+        await model.options(model='gpt-3.5-duck', chrome_path='/usr/bin/chromium')
+        # send message to chatbot
+        response = await model.send("Hello, world!")
+        # print response
+        print(response)
+        # close model
+        await model.close()
 
-if __name__ == "__main__":
-    # run async func
-    asyncio.run(main())
-```
+    if __name__ == "__main__":
+        # run async func
+        asyncio.run(main())
+    ```
+
 ## API Endpoints
 
 ### POST /v1/chat/completions
