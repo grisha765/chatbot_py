@@ -5,7 +5,7 @@ from chatbot.config import logging_config
 logging = logging_config.setup_logging(__name__)
 
 # Функция для отправки сообщения и получения ответа
-async def send_message(page, message, screenshot_path=None):
+async def send_message(page, message, screenshot_path=None, temp=False):
     await clickss(page, message)
     # Динамическое ожидание появления нового ответа
     logging.debug("Waiting for response...")
