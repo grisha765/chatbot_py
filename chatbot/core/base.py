@@ -7,6 +7,7 @@ logging = logging_config.setup_logging(__name__)
 async def main(input_text: str, screenshot_path: str, model: str):
     try:
         browser, page, playwright = await init_browser()
+        logging.info("Browser launched successfully")
         if 'duck' in model:
             from chatbot.providers.ddgo.start import prepare_page
             await prepare_page(page)
@@ -26,7 +27,7 @@ async def main(input_text: str, screenshot_path: str, model: str):
 
         # Если введен текст, отправляем его и завершаем
         if input_text:
-            response = await send_message(page, input_text, screenshot_path)
+            response = await send_message(page, input_text, screenshot_path, True)
             print(response)
         else:
             # Иначе запускаем интерактивный режим
@@ -39,7 +40,7 @@ async def main(input_text: str, screenshot_path: str, model: str):
                     _, file_name = user_input.split(maxsplit=1)
                     await take_screenshot(page, file_name)
                 else:
-                    response = await send_message(page, user_input)
+                    response = await send_message(page, user_input, temp=False)
                     print(f"Bot: {response}")
         # Закрываем браузер
         await browser.close()
