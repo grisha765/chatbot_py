@@ -32,10 +32,10 @@ class Model:
         else:
             raise ValueError("Invalid model specified")
 
-    async def send(self, text):
+    async def send(self, text, temp=False):
         if self.send_message is None:
             raise ValueError("No send_message function specified")
-        response = await self.send_message(self.page, text)
+        response = await self.send_message(self.page, text, temp=temp)
         return response
 
     async def close(self):
