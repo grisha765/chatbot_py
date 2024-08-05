@@ -67,8 +67,8 @@ To interact with the chatbot directly from the command line, use:
         model = chatbot.Model()
         # set options
         await model.options(model='gpt-3.5-duck', chrome_path='/usr/bin/chromium')
-        # send message to chatbot
-        response = await model.send("Hello, world!")
+        # send message to chatbot without saving message history
+        response = await model.send("Hello, world!", temp=False)
         # print response
         print(response)
         # close model
