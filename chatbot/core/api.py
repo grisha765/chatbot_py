@@ -5,8 +5,8 @@ from contextlib import asynccontextmanager
 
 from chatbot.core.browser import init_browser
 from chatbot.providers.ddgo.start import prepare_page
-from chatbot.providers.ddgo.gpt3 import send_message_fastapi as send_message_gpt3
-from chatbot.providers.ddgo.llama3 import send_message_fastapi as send_message_llama3
+from chatbot.providers.ddgo.gpt3 import send_message as send_message_gpt3
+from chatbot.providers.ddgo.llama3 import send_message as send_message_llama3
 from chatbot.config import logging_config
 from chatbot.config.config import Config
 logging = logging_config.setup_logging(__name__)
@@ -52,6 +52,7 @@ async def lifespan(app: FastAPI):
     global browser, page
     logging.info("Initializing browser and page")
     browser, page, playwright = await init_browser()
+    logging.info("Browser launched successfully")
     await prepare_page(page)
     try:
         yield
