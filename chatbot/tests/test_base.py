@@ -16,6 +16,7 @@ TEST_MODELS = {
 async def test_bot_response():
     for model, (send_message_func, prepare_page_func) in TEST_MODELS.items():
         browser, page, playwright = await init_browser()
+        logging.info("Browser launched successfully")
         try:
             await prepare_page_func(page)
             response = await send_message_func(page, Config.test_request)
